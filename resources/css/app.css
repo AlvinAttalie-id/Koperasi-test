@@ -6,4 +6,39 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-primary: #16A34A;
+    --color-primary-foreground: #ffffff;
+    --color-background: #F9FAFB;
+    --color-foreground: #111827;
+    --color-card: #ffffff;
+    --color-card-foreground: #111827;
+    --color-muted: #F3F4F6;
+    --color-muted-foreground: #6B7280;
+    --color-border: #E5E7EB;
+    --color-ring: #16A34A;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
 }
+
+/* Hide scrollbar by default, show on hover */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+*:hover::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+}
+
