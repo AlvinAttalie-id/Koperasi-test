@@ -29,7 +29,7 @@ class CityController extends Controller
             $cities = City::with('province')->orderBy('name', 'asc')->get();
         }
 
-        if ($request->wantsJson()) {
+        if ($request->wantsJson() || $request->expectsJson() || $request->ajax() || $provinceId > 0) {
             return response()->json(['success' => true, 'data' => $cities]);
         }
 

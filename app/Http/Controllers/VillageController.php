@@ -29,7 +29,7 @@ class VillageController extends Controller
             $villages = Village::with('district')->orderBy('name', 'asc')->get();
         }
 
-        if ($request->wantsJson()) {
+        if ($request->wantsJson() || $request->expectsJson() || $request->ajax() || $districtId > 0) {
             return response()->json(['success' => true, 'data' => $villages]);
         }
 

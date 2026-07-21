@@ -22,7 +22,7 @@ class ProvinceController extends Controller
     {
         $provinces = $this->locationService->getProvinces();
 
-        if ($request->wantsJson()) {
+        if ($request->wantsJson() || $request->expectsJson() || $request->ajax()) {
             return response()->json(['success' => true, 'data' => $provinces]);
         }
 

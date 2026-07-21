@@ -39,14 +39,20 @@
                         :options="$provinces->map(fn($p) => ['value' => $p->id, 'label' => $p->name])->toArray()"
                         placeholder="All Provinces"
                         x-on:change="
-                            fetch('/cities?province_id=' + $event.target.value)
+                            fetch('/cities?province_id=' + $event.target.value, { headers: { 'Accept': 'application/json' } })
                                 .then(r => r.json())
                                 .then(d => {
                                     let c = document.querySelector('[name=city_id]');
-                                    c.innerHTML = '<option value=\"\">All Cities</option>';
-                                    (d.data || d).forEach(city => {
-                                        c.innerHTML += '<option value=\"' + city.id + '\">' + city.name + '</option>';
-                                    });
+                                    if (c) {
+                                        c.options.length = 0;
+                                        c.options.add(new Option('All Cities', ''));
+                                        (d.data || d).forEach(city => c.options.add(new Option(city.name, city.id)));
+                                    }
+                                    let dist = document.querySelector('[name=district_id]');
+                                    if (dist) {
+                                        dist.options.length = 0;
+                                        dist.options.add(new Option('All Districts', ''));
+                                    }
                                 })
                         "
                     />
@@ -56,6 +62,18 @@
                         value="{{ request('city_id') }}"
                         :options="[]"
                         placeholder="All Cities"
+                        x-on:change="
+                            fetch('/districts?city_id=' + $event.target.value, { headers: { 'Accept': 'application/json' } })
+                                .then(r => r.json())
+                                .then(d => {
+                                    let dist = document.querySelector('[name=district_id]');
+                                    if (dist) {
+                                        dist.options.length = 0;
+                                        dist.options.add(new Option('All Districts', ''));
+                                        (d.data || d).forEach(dItem => dist.options.add(new Option(dItem.name, dItem.id)));
+                                    }
+                                })
+                        "
                     />
                     <x-select-dropdown
                         name="district_id"

@@ -35,21 +35,21 @@
                   villages: @js($villages->map(fn($v) => ['id' => $v->id, 'name' => $v->name])),
                   async loadCities() {
                       if (!this.province_id) { this.cities = []; this.city_id = ''; this.districts = []; this.district_id = ''; this.villages = []; this.village_id = ''; return; }
-                      const res = await fetch('/cities?province_id=' + this.province_id);
+                      const res = await fetch('/cities?province_id=' + this.province_id, { headers: { 'Accept': 'application/json' } });
                       const data = await res.json();
                       this.cities = data.data || data;
                       this.city_id = ''; this.districts = []; this.district_id = ''; this.villages = []; this.village_id = '';
                   },
                   async loadDistricts() {
                       if (!this.city_id) { this.districts = []; this.district_id = ''; this.villages = []; this.village_id = ''; return; }
-                      const res = await fetch('/districts?city_id=' + this.city_id);
+                      const res = await fetch('/districts?city_id=' + this.city_id, { headers: { 'Accept': 'application/json' } });
                       const data = await res.json();
                       this.districts = data.data || data;
                       this.district_id = ''; this.villages = []; this.village_id = '';
                   },
                   async loadVillages() {
                       if (!this.district_id) { this.villages = []; this.village_id = ''; return; }
-                      const res = await fetch('/villages?district_id=' + this.district_id);
+                      const res = await fetch('/villages?district_id=' + this.district_id, { headers: { 'Accept': 'application/json' } });
                       const data = await res.json();
                       this.villages = data.data || data;
                       this.village_id = '';

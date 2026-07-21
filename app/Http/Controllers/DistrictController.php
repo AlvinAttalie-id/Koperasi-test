@@ -29,7 +29,7 @@ class DistrictController extends Controller
             $districts = District::with('city')->orderBy('name', 'asc')->get();
         }
 
-        if ($request->wantsJson()) {
+        if ($request->wantsJson() || $request->expectsJson() || $request->ajax() || $cityId > 0) {
             return response()->json(['success' => true, 'data' => $districts]);
         }
 
