@@ -42,18 +42,25 @@ Route::middleware(['auth', 'active.fo'])->group(function (): void {
     // System Routes
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
-    Route::get('/login-logs', [LoginLogController::class, 'index'])->name('login-logs.index');
+    // System Audit Logs (Staff Only)
+    Route::middleware('role:super_admin,fo')->group(function (): void {
+        Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+        Route::get('/login-logs', [LoginLogController::class, 'index'])->name('login-logs.index');
+    });
 
     // Super Admin Routes: Front Office REST Resource with UUID binding
-    Route::resource('front-offices', FrontOfficeController::class)->parameters([
-        'front-offices' => 'user:uuid',
-    ]);
+    Route::middleware('role:super_admin')->group(function (): void {
+        Route::resource('front-offices', FrontOfficeController::class)->parameters([
+            'front-offices' => 'user:uuid',
+        ]);
+    });
 
-    // Front Office & Admin Routes: Members REST Resource with UUID binding
-    Route::resource('members', MemberController::class)->parameters([
-        'members' => 'member:uuid',
-    ]);
+    // Staff Routes (Super Admin & Front Office): Members REST Resource with UUID binding
+    Route::middleware('role:super_admin,fo')->group(function (): void {
+        Route::resource('members', MemberController::class)->parameters([
+            'members' => 'member:uuid',
+        ]);
+    });
 
     // Master Data Location Routes
     Route::get('/provinces', [ProvinceController::class, 'index'])->name('provinces.index');

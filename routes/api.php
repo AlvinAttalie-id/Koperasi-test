@@ -6,7 +6,9 @@ use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\VillageController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/provinces', [ProvinceController::class, 'index']);
-Route::get('/cities', [CityController::class, 'index']);
-Route::get('/districts', [DistrictController::class, 'index']);
-Route::get('/villages', [VillageController::class, 'index']);
+Route::middleware(['auth', 'active.fo'])->group(function (): void {
+    Route::get('/provinces', [ProvinceController::class, 'index']);
+    Route::get('/cities', [CityController::class, 'index']);
+    Route::get('/districts', [DistrictController::class, 'index']);
+    Route::get('/villages', [VillageController::class, 'index']);
+});

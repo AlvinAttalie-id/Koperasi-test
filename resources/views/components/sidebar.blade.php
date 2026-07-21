@@ -38,13 +38,13 @@
             'route' => 'activity-logs.index',
             'label' => 'Activity Logs',
             'icon' => 'activity',
-            'visible' => true
+            'visible' => $role !== \App\Enums\UserRole::Member
         ],
         [
             'route' => 'login-logs.index',
             'label' => 'Login Logs',
             'icon' => 'login-logs',
-            'visible' => true
+            'visible' => $role !== \App\Enums\UserRole::Member
         ],
         [
             'route' => 'profile.show',
