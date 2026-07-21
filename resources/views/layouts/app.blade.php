@@ -37,6 +37,9 @@
     <!-- Toast Notifications -->
     <x-toast />
 
+    <!-- Loading Overlay -->
+    <x-loading-overlay />
+
     @stack('scripts')
 </body>
 </html>
