@@ -85,4 +85,68 @@ class AuthorizationTest extends TestCase
         $response = $this->getJson('/api/provinces');
         $response->assertStatus(401);
     }
+
+    public function test_member_can_view_own_member_record(): void
+    {
+        $memberUser = User::factory()->create([
+            'role' => UserRole::Member,
+            'status' => UserStatus::Active,
+        ]);
+        $memberProfile = \App\Models\MemberProfile::factory()->create([
+            'user_id' => $memberUser->id,
+        ]);
+
+        $response = $this->actingAs($memberUser)->get("/members/{$memberProfile->uuid}");
+        $response->assertStatus(200);
+    }
+
+    public function test_member_can_edit_own_member_record(): void
+    {
+        $memberUser = User::factory()->create([
+            'role' => UserRole::Member,
+            'status' => UserStatus::Active,
+        ]);
+        $memberProfile = \App\Models\MemberProfile::factory()->create([
+            'user_id' => $memberUser->id,
+        ]);
+
+        $response = $this->actingAs($memberUser)->get("/members/{$memberProfile->uuid}/edit");
+        $response->assertStatus(200);
+    }
+
+    public function test_member_cannot_view_another_member_record(): void
+    {
+        $memberUser1 = User::factory()->create([
+            'role' => UserRole::Member,
+            'status' => UserStatus::Active,
+        ]);
+        $memberUser2 = User::factory()->create([
+            'role' => UserRole::Member,
+            'status' => UserStatus::Active,
+        ]);
+        $memberProfile2 = \App\Models\MemberProfile::factory()->create([
+            'user_id' => $memberUser2->id,
+        ]);
+
+        $response = $this->actingAs($memberUser1)->get("/members/{$memberProfile2->uuid}");
+        $response->assertStatus(403);
+    }
+
+    public function test_member_cannot_edit_another_member_record(): void
+    {
+        $memberUser1 = User::factory()->create([
+            'role' => UserRole::Member,
+            'status' => UserStatus::Active,
+        ]);
+        $memberUser2 = User::factory()->create([
+            'role' => UserRole::Member,
+            'status' => UserStatus::Active,
+        ]);
+        $memberProfile2 = \App\Models\MemberProfile::factory()->create([
+            'user_id' => $memberUser2->id,
+        ]);
+
+        $response = $this->actingAs($memberUser1)->get("/members/{$memberProfile2->uuid}/edit");
+        $response->assertStatus(403);
+    }
 }

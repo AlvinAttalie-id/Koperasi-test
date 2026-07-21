@@ -55,12 +55,17 @@ Route::middleware(['auth', 'active.fo'])->group(function (): void {
         ]);
     });
 
-    // Staff Routes (Super Admin & Front Office): Members REST Resource with UUID binding
+    // Staff Routes (Super Admin & Front Office)
     Route::middleware('role:super_admin,fo')->group(function (): void {
-        Route::resource('members', MemberController::class)->parameters([
+        Route::resource('members', MemberController::class)->except(['show', 'edit', 'update'])->parameters([
             'members' => 'member:uuid',
         ]);
     });
+
+    // Resource routes that permit member self-access (ownership checks performed by MemberPolicy)
+    Route::resource('members', MemberController::class)->only(['show', 'edit', 'update'])->parameters([
+        'members' => 'member:uuid',
+    ]);
 
     // Master Data Location Routes
     Route::get('/provinces', [ProvinceController::class, 'index'])->name('provinces.index');

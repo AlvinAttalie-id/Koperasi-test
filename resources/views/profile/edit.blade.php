@@ -59,6 +59,23 @@
             @csrf
             @method('PUT')
 
+            @if($errors->any())
+                <div class="bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-2">
+                    <p class="text-sm font-medium text-red-700">Please fix the following errors:</p>
+                    <ul class="mt-1 list-disc list-inside text-xs text-red-600">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="bg-green-50 border border-green-200 rounded-lg px-4 py-3 mb-2">
+                    <p class="text-sm font-medium text-green-700">{{ session('success') }}</p>
+                </div>
+            @endif
+
             <x-card title="Edit Profile Details">
                 <p class="text-xs text-gray-400 mb-5 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
                     Member Number, NIK, and Registration Date cannot be changed. Contact admin if you need to update them.
@@ -67,6 +84,19 @@
                 <div class="space-y-4">
                     <x-form-input label="Full Name" name="name" :value="$user->name" placeholder="Enter full name" required />
                     <x-form-input label="Phone Number" name="phone" :value="$user->phone" placeholder="08XXXXXXXXXX" />
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <x-select-dropdown
+                            label="Gender"
+                            name="gender"
+                            :value="$memberProfile->gender instanceof \App\Enums\Gender ? $memberProfile->gender->value : $memberProfile->gender"
+                            :options="[['value' => 'male', 'label' => 'Male'], ['value' => 'female', 'label' => 'Female']]"
+                            required
+                        />
+                        <x-form-input label="Birth Place" name="birth_place" :value="$memberProfile->birth_place" placeholder="e.g. Jakarta" required />
+                        <x-date-picker label="Birth Date" name="birth_date" :value="$memberProfile->birth_date ? \Carbon\Carbon::parse($memberProfile->birth_date)->format('Y-m-d') : ''" required />
+                    </div>
+
                     <x-form-input label="Occupation" name="occupation" :value="$memberProfile->occupation" placeholder="e.g. Farmer, Teacher" required />
 
                     <div class="sm:col-span-2">

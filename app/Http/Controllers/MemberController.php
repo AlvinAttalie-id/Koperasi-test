@@ -37,12 +37,29 @@ class MemberController extends Controller
             'district_id',
             'village_id',
             'register_date',
-            'sort_by',
-            'sort_dir',
         ]);
+
+        // Map UI sort options to database sorting
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'oldest') {
+            $filters['sort_by'] = 'created_at';
+            $filters['sort_dir'] = 'asc';
+        } else {
+            $filters['sort_by'] = 'created_at';
+            $filters['sort_dir'] = 'desc';
+        }
 
         $members = $this->memberService->getMembers($filters, 10);
         $provinces = $this->locationService->getProvinces();
+
+        // Preload child options for active cascade filters
+        $cities = $request->filled('province_id')
+            ? $this->locationService->getCitiesByProvince($request->integer('province_id'))
+            : collect();
+
+        $districts = $request->filled('city_id')
+            ? $this->locationService->getDistrictsByCity($request->integer('city_id'))
+            : collect();
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -51,7 +68,7 @@ class MemberController extends Controller
             ]);
         }
 
-        return view('members.index', compact('members', 'provinces', 'filters'));
+        return view('members.index', compact('members', 'provinces', 'filters', 'cities', 'districts'));
     }
 
     /**

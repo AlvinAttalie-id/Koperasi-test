@@ -60,7 +60,7 @@
                         name="city_id"
                         label="City"
                         value="{{ request('city_id') }}"
-                        :options="[]"
+                        :options="$cities->map(fn($c) => ['value' => $c->id, 'label' => $c->name])->toArray()"
                         placeholder="All Cities"
                         x-on:change="
                             fetch('/districts?city_id=' + $event.target.value, { headers: { 'Accept': 'application/json' } })
@@ -79,13 +79,23 @@
                         name="district_id"
                         label="District"
                         value="{{ request('district_id') }}"
-                        :options="[]"
+                        :options="$districts->map(fn($d) => ['value' => $d->id, 'label' => $d->name])->toArray()"
                         placeholder="All Districts"
                     />
                     <x-date-picker
                         name="register_date"
                         label="Registration Date"
                         value="{{ request('register_date') }}"
+                    />
+                    <x-select-dropdown
+                        name="sort"
+                        label="Sort By"
+                        value="{{ request('sort', 'newest') }}"
+                        :options="[
+                            ['value' => 'newest', 'label' => 'Newest First'],
+                            ['value' => 'oldest', 'label' => 'Oldest First']
+                        ]"
+                        placeholder=""
                     />
                 </x-filter-panel>
 
