@@ -17,8 +17,8 @@
 @section('title', 'Member Management')
 
 @section('content')
-<div class="space-y-4 px-3 sm:px-6">
-    <x-card class="!px-3.5 sm:!px-5">
+<div class="space-y-4 px-0 sm:px-6">
+    <x-card class="!p-3 sm:!px-5">
         <!-- Search and Filter Toolbar -->
         <div class="flex flex-col gap-3 mb-4">
             <form action="{{ route('members.index') }}" method="GET" class="w-full">
@@ -122,7 +122,7 @@
                 <!-- Desktop/Tablet Table Row -->
                 <tr class="hover:bg-gray-50/80 transition-colors group hidden xl:table-row">
                     <td class="py-3.5 px-3 first:pl-0 text-sm text-gray-700 flex-1 min-w-[220px]">
-                        <div class="flex items-center gap-3">
+                        <div class="desktop-table-cell-content flex items-center gap-3">
                             <x-avatar :name="$member->user->name" size="sm" />
                             <div class="min-w-0 flex-1">
                                 <p class="text-sm font-medium text-gray-900 line-clamp-2 break-words">{{ $member->user->name }}</p>
@@ -131,22 +131,26 @@
                         </div>
                     </td>
                     <td class="py-3.5 px-3 text-sm text-gray-700 w-fit whitespace-nowrap">
-                        <span class="font-mono text-xs">{{ $member->member_number }}</span>
+                        <span class="desktop-table-cell-content font-mono text-xs">{{ $member->member_number }}</span>
                     </td>
                     <td class="py-3.5 px-3 text-sm text-gray-700 min-w-[150px]">
-                        <p class="text-sm text-gray-700 truncate">{{ $member->city?->name ?? '-' }}</p>
-                        <p class="text-xs text-gray-400 truncate">{{ $member->province?->name ?? '-' }}</p>
+                        <div class="desktop-table-cell-content">
+                            <p class="text-sm text-gray-700 truncate">{{ $member->city?->name ?? '-' }}</p>
+                            <p class="text-xs text-gray-400 truncate">{{ $member->province?->name ?? '-' }}</p>
+                        </div>
                     </td>
                     <td class="py-3.5 px-3 text-sm text-gray-700 min-w-[100px]">
-                        <x-badge variant="{{ $statusVal === 'active' ? 'success' : 'danger' }}" dot>
-                            {{ ucfirst($statusVal) }}
-                        </x-badge>
+                        <div class="desktop-table-cell-content">
+                            <x-badge variant="{{ $statusVal === 'active' ? 'success' : 'danger' }}" dot>
+                                {{ ucfirst($statusVal) }}
+                            </x-badge>
+                        </div>
                     </td>
                     <td class="py-3.5 px-3 text-sm text-gray-700 min-w-[100px] whitespace-nowrap">
-                        {{ $member->register_date ? \Carbon\Carbon::parse($member->register_date)->format('d M, Y') : '-' }}
+                        <span class="desktop-table-cell-content">{{ $member->register_date ? \Carbon\Carbon::parse($member->register_date)->format('d M, Y') : '-' }}</span>
                     </td>
                     <td class="py-3.5 px-3 last:pr-0 text-sm text-gray-700 w-fit">
-                        <div class="flex items-center gap-1">
+                        <div class="desktop-table-cell-content flex items-center gap-1">
                             <a href="{{ route('members.show', $member->uuid) }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.43 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
                             </a>
@@ -161,7 +165,7 @@
                 </tr>
 
                 <!-- Mobile Card View (< 640px) -->
-                <div class="responsive-data-card xl:hidden w-full bg-white border border-gray-100 rounded-xl p-3.5 space-y-3 break-words min-w-0">
+                <div class="responsive-data-card xl:hidden w-full max-w-none bg-white border border-gray-100 rounded-xl p-3 space-y-3 break-words min-w-0">
                     <div class="responsive-data-card__header">
                         <x-avatar :name="$member->user->name" size="md" class="responsive-data-card__avatar" />
                         <div class="responsive-data-card__user-info">

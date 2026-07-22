@@ -47,6 +47,26 @@ class AuthorizationTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_super_admin_can_update_own_profile_without_member_profile(): void
+    {
+        $admin = User::factory()->create([
+            'role' => UserRole::SuperAdmin,
+            'status' => UserStatus::Active,
+        ]);
+
+        $response = $this->actingAs($admin)->put('/profile', [
+            'name' => 'Updated Administrator',
+            'phone' => '081234567890',
+        ]);
+
+        $response->assertRedirect(route('profile.show'));
+        $this->assertDatabaseHas('users', [
+            'id' => $admin->id,
+            'name' => 'Updated Administrator',
+            'phone' => '081234567890',
+        ]);
+    }
+
     public function test_member_cannot_access_members_management(): void
     {
         $member = User::factory()->create([

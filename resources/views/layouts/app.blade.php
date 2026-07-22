@@ -21,14 +21,14 @@
         <x-sidebar />
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col min-h-screen transition-all duration-300"
+        <div class="flex-1 flex flex-col min-w-0 min-h-screen transition-all duration-300"
              :class="collapsed ? 'lg:pl-16' : 'lg:pl-64'">
             
             <!-- Navbar component -->
             <x-navbar :title="$title ?? 'Dashboard'" :breadcrumb="$breadcrumb ?? []" />
 
             <!-- Main Page Content -->
-            <main class="flex-1 p-4 lg:p-6 overflow-y-auto">
+            <main class="flex-1 min-w-0 p-3 lg:p-6 overflow-y-auto">
                 @yield('content')
             </main>
         </div>

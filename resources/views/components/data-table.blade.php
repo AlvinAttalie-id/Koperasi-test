@@ -1,13 +1,15 @@
 @props([
     'headers' => [],
     'class' => '',
-    'mobileCards' => false
+    'mobileCards' => false,
+    'tableRows' => null,
+    'mobileCardsContent' => null,
 ])
 
-<div {{ $attributes->merge(['class' => "responsive-data-table responsive-data-table--xs -mx-3 sm:-mx-6 px-3 sm:px-6 min-w-0 {$class}"]) }}>
+<div {{ $attributes->merge(['class' => "responsive-data-table responsive-data-table--xs " . ($mobileCards ? 'responsive-data-table--mobile-cards ' : '') . "-mx-3 sm:-mx-6 px-0 sm:px-6 min-w-0 {$class}"]) }}>
     <!-- Desktop/Tablet Table View -->
-    <div class="responsive-data-table__table overflow-x-auto">
-        <table class="w-full min-w-max">
+    <div class="responsive-data-table__table {{ $mobileCards ? 'hidden xl:block' : '' }} overflow-x-auto">
+        <table class="w-full min-w-max" @if(! $mobileCards) style="display: table" @endif>
             <thead class="sticky top-0 bg-white z-10">
                 <tr class="border-b border-gray-100">
                     @foreach($headers as $key => $header)
@@ -50,7 +52,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-50">
-                {{ $slot }}
+                {{ $tableRows ?? $slot }}
             </tbody>
         </table>
     </div>
@@ -58,7 +60,7 @@
     <!-- Mobile Card View (shown on screens < 640px) -->
     @if($mobileCards)
         <div class="responsive-data-table__cards xl:hidden space-y-4 min-w-0">
-            {{ $slot }}
+            {{ $mobileCardsContent ?? $slot }}
         </div>
     @endif
 </div>

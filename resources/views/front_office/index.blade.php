@@ -57,14 +57,14 @@
         </div>
 
         <!-- Front Offices Table -->
-        <x-data-table :headers="$headers" mobileCards>
+        <x-data-table :headers="$headers">
             @forelse($frontOffices as $fo)
                 @php
                     $foStatus = $fo->status instanceof \App\Enums\UserStatus ? $fo->status->value : $fo->status;
                 @endphp
                 
                 <!-- Desktop/Tablet Table Row -->
-                <tr class="hover:bg-gray-50/80 transition-colors group hidden xl:table-row">
+                <tr class="hover:bg-gray-50/80 transition-colors group">
                     <td class="py-3.5 px-3 first:pl-0 text-sm text-gray-700 flex-1 min-w-[220px]">
                         <div class="flex items-center gap-3">
                             <x-avatar :name="$fo->name" size="sm" />
@@ -108,7 +108,7 @@
                 </tr>
 
                 <!-- Mobile Card View (< 640px) -->
-                <div class="responsive-data-card xl:hidden w-full bg-white border border-gray-100 rounded-xl p-3.5 space-y-3 break-words min-w-0">
+                <div class="responsive-data-card hidden xl:hidden w-full bg-white border border-gray-100 rounded-xl p-3.5 space-y-3 break-words min-w-0">
                     <div class="responsive-data-card__header">
                         <x-avatar :name="$fo->name" size="md" class="responsive-data-card__avatar" />
                         <div class="responsive-data-card__user-info">

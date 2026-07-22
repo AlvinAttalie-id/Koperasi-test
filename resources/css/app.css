@@ -196,13 +196,20 @@ body.cursor-progress * {
 }
 
 .responsive-data-table__cards > * {
+    width: 100%;
     min-width: 0;
-    max-width: 100%;
+    max-width: none;
 }
 
 .responsive-data-card,
 .responsive-data-card * {
     min-width: 0;
+}
+
+@media (max-width: 1279px) {
+    .responsive-data-table__cards .desktop-table-cell-content {
+        display: none !important;
+    }
 }
 
 .responsive-data-card .responsive-data-card__header {
@@ -292,7 +299,7 @@ body.cursor-progress * {
 }
 
 @media (max-width: 1279px) {
-    .responsive-data-table__table table {
+    .responsive-data-table--mobile-cards .responsive-data-table__table table {
         display: none;
     }
 }

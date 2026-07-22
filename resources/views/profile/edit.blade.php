@@ -18,11 +18,23 @@
     </div>
 
     @if(!$memberProfile)
-        <x-card>
-            <div class="text-center py-6">
-                <p class="text-sm text-gray-500">Only cooperative members can update their profile fields through this interface. Contact administrators for staff details update.</p>
+        <form method="POST" action="{{ route('profile.update') }}" class="space-y-6">
+            @csrf
+            @method('PUT')
+
+            <x-card title="Account Details">
+                <p class="text-sm text-gray-500 mb-5">Update the contact details for your account.</p>
+                <div class="space-y-4">
+                    <x-form-input label="Full Name" name="name" :value="$user->name" placeholder="Enter full name" required />
+                    <x-form-input label="Phone Number" name="phone" :value="$user->phone" placeholder="08XXXXXXXXXX" />
+                </div>
+            </x-card>
+
+            <div class="flex justify-end gap-3">
+                <a href="{{ route('profile.show') }}" class="h-10 px-4 flex items-center justify-center text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">Cancel</a>
+                <button type="submit" class="h-10 px-6 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition-colors">Save Changes</button>
             </div>
-        </x-card>
+        </form>
     @else
         <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-6"
               x-data="{

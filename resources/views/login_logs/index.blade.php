@@ -26,6 +26,7 @@
 
         <!-- Logs Table -->
         <x-data-table :headers="$headers" mobileCards>
+            <x-slot:tableRows>
             @forelse($logs as $log)
                 <!-- Desktop/Tablet Table Row -->
                 <tr class="hover:bg-gray-50/80 transition-colors group hidden xl:table-row">
@@ -66,7 +67,22 @@
                     </td>
                 </tr>
 
-                <!-- Mobile Card View (< 640px) -->
+            @empty
+                <!-- Desktop Empty State -->
+                <tr>
+                    <td colspan="5">
+                        <x-empty-state
+                            title="No login logs found"
+                            description="All system authentication events will be tracked here."
+                        />
+                    </td>
+                </tr>
+            @endforelse
+            </x-slot:tableRows>
+
+            <x-slot:mobileCardsContent>
+            @forelse($logs as $log)
+                <!-- Mobile Card View -->
                 <div class="responsive-data-card xl:hidden w-full bg-white border border-gray-100 rounded-xl p-3.5 space-y-3 break-words min-w-0">
                     <div class="responsive-data-card__header">
                         <x-avatar :name="$log->user?->name ?? 'System'" size="md" class="responsive-data-card__avatar" />
@@ -103,23 +119,15 @@
                     </div>
                 </div>
             @empty
-                <!-- Desktop Empty State -->
-                <tr class="hidden xl:table-row">
-                    <td colspan="5">
-                        <x-empty-state
-                            title="No login logs found"
-                            description="All system authentication events will be tracked here."
-                        />
-                    </td>
-                </tr>
                 <!-- Mobile Empty State -->
-                <div class="xl:hidden">
+                <div>
                     <x-empty-state
                         title="No login logs found"
                         description="All system authentication events will be tracked here."
                     />
                 </div>
             @endforelse
+            </x-slot:mobileCardsContent>
         </x-data-table>
 
         <!-- Pagination -->

@@ -64,7 +64,23 @@ class ProfileController extends Controller
         $memberProfile = $user->memberProfile;
 
         if (! $memberProfile) {
-            return back()->withErrors(['error' => 'Member profile not found.']);
+            $user->update($request->validated());
+
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'activity' => 'update_profile',
+                'description' => 'User updated personal profile.',
+            ]);
+
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Profile updated successfully.',
+                    'data' => $user->fresh(),
+                ]);
+            }
+
+            return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
         }
 
         $this->memberService->updateMember($memberProfile, $request->validated());

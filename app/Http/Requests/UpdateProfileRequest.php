@@ -27,9 +27,16 @@ class UpdateProfileRequest extends FormRequest
     {
         $userId = $this->user()?->id;
 
-        return [
+        $accountRules = [
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20', Rule::unique('users', 'phone')->ignore($userId)],
+        ];
+
+        if (! $this->user()?->memberProfile) {
+            return $accountRules;
+        }
+
+        return array_merge($accountRules, [
             'gender' => ['required', Rule::enum(Gender::class)],
             'birth_place' => ['required', 'string', 'max:100'],
             'birth_date' => ['required', 'date', 'before:today'],
@@ -40,6 +47,6 @@ class UpdateProfileRequest extends FormRequest
             'village_id' => ['required', 'integer', 'exists:villages,id'],
             'occupation' => ['required', 'string', 'max:100'],
             'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-        ];
+        ]);
     }
 }
