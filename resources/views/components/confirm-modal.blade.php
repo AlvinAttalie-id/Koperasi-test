@@ -9,10 +9,11 @@
 
 <div
     x-data="{ open: false, actionUrl: '' }"
+    data-loading-modal
     x-show="open"
     @open-modal-{{ $name }}.window="open = true; actionUrl = $event.detail.actionUrl || ''"
     @close-modal-{{ $name }}.window="open = false"
-    @keydown.escape.window="open = false"
+    @keydown.escape.window="if (!$el.dataset.loading) open = false"
     x-effect="document.body.style.overflow = open ? 'hidden' : ''"
     class="fixed inset-0 z-50 flex items-center justify-center p-4"
     style="display: none;"
@@ -27,7 +28,7 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
         class="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        @click="open = false"
+        @click="!$root.dataset.loading && (open = false)"
     ></div>
 
     <!-- Modal Content Panel -->
@@ -46,7 +47,7 @@
                 <h2 class="text-base font-semibold text-gray-900">{{ $title }}</h2>
                 <button
                     type="button"
-                    @click="open = false"
+                    @click="!$root.dataset.loading && (open = false)"
                     class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -63,7 +64,7 @@
         <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
             <button
                 type="button"
-                @click="open = false"
+                @click="!$root.dataset.loading && (open = false)"
                 class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
                 Cancel
@@ -71,12 +72,13 @@
             <form :action="actionUrl" method="POST" class="inline">
                 @csrf
                 @method($method)
-                <button
-                    type="submit"
-                    class="px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ $variant === 'danger' ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-green-600 text-white hover:bg-green-700' }}"
+                <x-loading-button
+                    :loading-text="$confirmLabel === 'Delete' ? 'Deleting...' : 'Saving...'"
+                    :variant="$variant === 'danger' ? 'danger' : 'primary'"
+                    class="px-4 py-2 text-sm font-medium rounded-lg"
                 >
                     {{ $confirmLabel }}
-                </button>
+                </x-loading-button>
             </form>
         </div>
     </div>

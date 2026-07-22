@@ -17,10 +17,11 @@
 
 <div
     x-data="{ open: false }"
+    data-loading-modal
     x-show="open"
     @open-modal-{{ $name }}.window="open = true"
     @close-modal-{{ $name }}.window="open = false"
-    @keydown.escape.window="open = false"
+    @keydown.escape.window="if (!$el.dataset.loading) open = false"
     x-effect="document.body.style.overflow = open ? 'hidden' : ''"
     class="fixed inset-0 z-50 flex items-center justify-center p-4"
     style="display: none;"
@@ -35,7 +36,7 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
         class="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        @click="open = false"
+        @click="!$root.dataset.loading && (open = false)"
     ></div>
 
     <!-- Modal Content Panel -->
@@ -54,7 +55,7 @@
                 <h2 class="text-base font-semibold text-gray-900">{{ $title }}</h2>
                 <button
                     type="button"
-                    @click="open = false"
+                    @click="!$root.dataset.loading && (open = false)"
                     class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
                 >
                     <!-- Close X SVG Icon -->
