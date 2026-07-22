@@ -57,8 +57,30 @@ class UserSeeder extends Seeder
         }
 
         // 2. Front Office (10)
-        // 8 Active
-        for ($i = 1; $i <= 8; $i++) {
+        // Two named demo accounts, followed by six active staff accounts.
+        $frontOffices = [
+            ['name' => 'Rini Wati', 'email' => 'fo1@koperasi.id'],
+            ['name' => 'Bagus Pratama', 'email' => 'fo2@koperasi.id'],
+        ];
+
+        foreach ($frontOffices as $index => $frontOffice) {
+            $i = $index + 1;
+            $users[] = [
+                'uuid' => (string) Str::uuid(),
+                'name' => $frontOffice['name'],
+                'email' => $frontOffice['email'],
+                'phone' => '0812' . $faker->numerify('########'),
+                'password' => $password,
+                'role' => UserRole::Fo->value,
+                'status' => UserStatus::Active->value,
+                'email_verified_at' => $now,
+                'remember_token' => Str::random(10),
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        for ($i = 3; $i <= 8; $i++) {
             $users[] = [
                 'uuid' => (string) Str::uuid(),
                 'name' => $faker->name(),
@@ -91,7 +113,30 @@ class UserSeeder extends Seeder
         }
 
         // 3. Members (88)
-        for ($i = 1; $i <= 88; $i++) {
+        // Two named demo accounts, followed by generated members.
+        $members = [
+            ['name' => 'Siti Aminah', 'email' => 'member1@koperasi.id'],
+            ['name' => 'Budi Santoso', 'email' => 'member2@koperasi.id'],
+        ];
+
+        foreach ($members as $index => $member) {
+            $i = $index + 1;
+            $users[] = [
+                'uuid' => (string) Str::uuid(),
+                'name' => $member['name'],
+                'email' => $member['email'],
+                'phone' => $faker->randomElement(['0852', '0853', '0821', '0822', '0878', '0896']) . $faker->numerify('########'),
+                'password' => $password,
+                'role' => UserRole::Member->value,
+                'status' => UserStatus::Active->value,
+                'email_verified_at' => $now,
+                'remember_token' => Str::random(10),
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        for ($i = 3; $i <= 88; $i++) {
             $users[] = [
                 'uuid' => (string) Str::uuid(),
                 'name' => $faker->name(),
